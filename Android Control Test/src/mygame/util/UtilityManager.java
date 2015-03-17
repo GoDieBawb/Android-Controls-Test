@@ -31,7 +31,8 @@ public class UtilityManager {
     }
     
     private void createControlManager() {
-        controlManager = new ControlManager(app.getStateManager());
+        controlManager = new ControlManager(app.getStateManager(), this);
+        controlManager.initControlGui(app.getStateManager(), this);
     }
     
     public ControlManager getControlManager() {

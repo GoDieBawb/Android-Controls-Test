@@ -23,16 +23,15 @@ public class ControlManager {
     private InteractionControl currentControl;   
     private ControlGui         controlGui;
     
-    public ControlManager(AppStateManager stateManager) {
+    public ControlManager(AppStateManager stateManager, UtilityManager um) {
         createSlerpControl(stateManager);
         createChaseControl(stateManager);
         createTopDownControl(stateManager);
-        createControlGui(stateManager);
         currentControl = topDownControl;
     }
     
-    private void createControlGui(AppStateManager stateManager) {
-        controlGui = new ControlGui(stateManager);
+    public void initControlGui(AppStateManager stateManager, UtilityManager um) {
+        controlGui = new ControlGui(stateManager, um);
     }
     
     private void createTopDownControl(AppStateManager stateManager) {
@@ -48,8 +47,24 @@ public class ControlManager {
         chaseControl.setEnabled(false);
     }
     
+    public ChaseControl getChaseControl() {
+        return chaseControl;
+    }
+    
+    public SlerpControl getSlerpControl() {
+        return slerpControl;
+    }
+    
+    public TopDownControl getTopDownControl() {
+        return topDownControl;
+    }
+    
     public void setCurrentControl(InteractionControl control) {
+        if(currentControl instanceof ChaseControl)
+            ((ChaseControl)currentControl).setEnabled(false);
         currentControl = control;
+        if(currentControl instanceof ChaseControl)
+            ((ChaseControl)currentControl).setEnabled(true);
     }
     
     public void update(float tpf) {

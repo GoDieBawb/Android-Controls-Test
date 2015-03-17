@@ -61,7 +61,7 @@ public class ChaseCameraManager {
     
     public void setEnabled(boolean newVal) {
         enabled = newVal;
-        cam.setEnabled(enabled);
+        cam.setEnabled(newVal);
     }
     
     public boolean isEnabled() {

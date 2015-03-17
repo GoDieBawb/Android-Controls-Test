@@ -6,7 +6,6 @@ package mygame.util;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.TouchEvent;
 import com.jme3.math.Vector2f;
 import mygame.GameManager;

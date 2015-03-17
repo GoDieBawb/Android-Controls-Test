@@ -50,15 +50,15 @@ public class SlerpCameraManager {
   
   public void chaseCamMove(float tpf) {
       
-      float minDistance = 2f;
+      float minDistance = 3f;
       
       cameraLook = cameraLook.mult(.7f).add
-                    (player.getModel().getWorldTranslation().add(0,1f,0).mult(.3f));
+                    (player.getModel().getWorldTranslation().add(0,.5f,0).mult(.3f));
       
       cameraSpot = player.getModel().getWorldTranslation()
                       .add(player.getPhys().getViewDirection()
                           .normalize()
-                            .negate().mult(minDistance)).add(0,1f,0);
+                            .negate().mult(minDistance)).add(0,.5f,0);
       
       slerpLookAt(cameraLook, tpf);
  

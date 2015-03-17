@@ -7,7 +7,8 @@ package mygame.controls;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.math.Vector2f;
-import mygame.GameManager;
+import mygame.util.ControlManager;
+import mygame.util.UtilityManager;
 import tonegod.gui.controls.buttons.ButtonAdapter;
 import tonegod.gui.core.Screen;
 
@@ -19,11 +20,11 @@ public class ControlGui {
     
     private ButtonAdapter   menuButton, slerpButton, chaseButton, topDownButton;
     private Screen          screen;
-    private AppStateManager stateManager;
+    private ControlManager  controlManager;
     
-    public ControlGui(AppStateManager stateManager) {
-        this.stateManager = stateManager;
-        screen            = stateManager.getState(GameManager.class).getUtilityManager().getGuiManager().getScreen();
+    public ControlGui(AppStateManager stateManager, UtilityManager um) {
+        screen            = um.getGuiManager().getScreen();
+        controlManager    = um.getControlManager();
         createMenuButton();
         createChaseButton();
         createSlerpButton();
@@ -37,14 +38,34 @@ public class ControlGui {
             @Override
             public void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
                 super.onButtonMouseLeftUp(evt, toggled);
+                
+                if(getText().equals("Menu")) {
+                    setText("Exit");
+                    slerpButton.show();
+                    chaseButton.show();
+                    topDownButton.show();
+                }
+                
+                else {
+                    exitMenu();
+                }
+                
             }
             
         };
         
         screen.addElement(menuButton);
         menuButton.setDimensions(screen.getWidth()/10, screen.getHeight()/10);
-        menuButton.setPosition(screen.getWidth()/2,screen.getHeight()/2);
+        menuButton.setPosition(0, screen.getHeight()-menuButton.getHeight());
+        menuButton.setText("Menu");
         
+    }
+    
+    private void exitMenu() {
+        menuButton.setText("Menu");
+        slerpButton.hide();
+        chaseButton.hide();
+        topDownButton.hide();
     }
     
     private void createTopDownButton() {
@@ -54,11 +75,17 @@ public class ControlGui {
             @Override
             public void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
                 super.onButtonMouseLeftUp(evt, toggled);
+                controlManager.setCurrentControl(controlManager.getTopDownControl());
+                exitMenu();
             }
             
         };
         
         topDownButton.setDimensions(screen.getWidth()/10, screen.getHeight()/10);
+        topDownButton.setPosition(screen.getWidth()/2 - topDownButton.getWidth()/2, screen.getHeight()/2 - topDownButton.getHeight()/2);
+        topDownButton.setText("Top Down");
+        screen.addElement(topDownButton);
+        topDownButton.hide();
         
     }
     
@@ -69,11 +96,17 @@ public class ControlGui {
             @Override
             public void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
                 super.onButtonMouseLeftUp(evt, toggled);
+                controlManager.setCurrentControl(controlManager.getSlerpControl());
+                exitMenu();
             }
             
         };
         
         slerpButton.setDimensions(screen.getWidth()/10, screen.getHeight()/10);
+        slerpButton.setPosition(screen.getWidth()/2 - slerpButton.getWidth()/2, screen.getHeight()/2 - slerpButton.getHeight()/2 - slerpButton.getHeight()*2);
+        slerpButton.setText("Slerp");
+        screen.addElement(slerpButton);
+        slerpButton.hide();
         
     }
     
@@ -84,11 +117,17 @@ public class ControlGui {
             @Override
             public void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
                 super.onButtonMouseLeftUp(evt, toggled);
+                controlManager.setCurrentControl(controlManager.getChaseControl());
+                exitMenu();
             }
             
         };
         
         chaseButton.setDimensions(screen.getWidth()/10, screen.getHeight()/10);
+        chaseButton.setPosition(screen.getWidth()/2 - chaseButton.getWidth()/2, screen.getHeight()/2 - chaseButton.getHeight()/2 + chaseButton.getHeight()*2);
+        chaseButton.setText("Chase");
+        screen.addElement(chaseButton);
+        chaseButton.hide();
         
     }
     
