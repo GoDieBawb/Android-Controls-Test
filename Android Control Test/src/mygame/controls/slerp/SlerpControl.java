@@ -71,7 +71,7 @@ public class SlerpControl extends InteractionControl {
         }
         
         float speedMult;
-        speedMult = player.getSpeedMult();
+        speedMult = player.getSpeedMult()/2f;
         
         player.getPhys().setWalkDirection(walkDirection.mult(speedMult));
         if (!up && !down && !left && !right)

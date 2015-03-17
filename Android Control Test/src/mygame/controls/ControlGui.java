@@ -4,13 +4,22 @@
  */
 package mygame.controls;
 
+import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.TextureKey;
 import com.jme3.input.event.MouseButtonEvent;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
+import com.jme3.texture.Texture;
+import mygame.GameManager;
+import mygame.player.PlayerManager;
 import mygame.util.ControlManager;
+import mygame.util.InteractionManager;
 import mygame.util.UtilityManager;
 import tonegod.gui.controls.buttons.ButtonAdapter;
+import tonegod.gui.controls.extras.android.Joystick;
 import tonegod.gui.core.Screen;
+import tonegod.gui.effects.Effect;
 
 /**
  *
@@ -21,14 +30,95 @@ public class ControlGui {
     private ButtonAdapter   menuButton, slerpButton, chaseButton, topDownButton;
     private Screen          screen;
     private ControlManager  controlManager;
+    private Joystick        stick;
+    private AppStateManager stateManager;
+    private UtilityManager  um;
     
     public ControlGui(AppStateManager stateManager, UtilityManager um) {
         screen            = um.getGuiManager().getScreen();
         controlManager    = um.getControlManager();
+        this.stateManager = stateManager;
+        this.um           = um;
         createMenuButton();
         createChaseButton();
         createSlerpButton();
         createTopDownButton();
+        createJoystick();
+    }
+    
+    private void createJoystick(){
+        
+        stick = new Joystick(screen, Vector2f.ZERO, (int)(screen.getWidth()/6)) {
+            InteractionManager im = um.getInteractionManager();
+            
+            @Override
+            public void show() {
+                
+                boolean isAndroid = "Dalvik".equals(System.getProperty("java.vm.name"));
+                
+                //if (!isAndroid)
+                    //return;
+                
+                super.show();
+                
+            }
+            
+            @Override
+            public void onUpdate(float tpf, float deltaX, float deltaY) {
+            
+                
+                float dzVal = .3f; // Dead zone threshold
+            
+                if (deltaX < -dzVal) {
+                    im.setLeft(true);
+                    im.setRight(false);
+                }
+            
+                else if (deltaX > dzVal) {
+                    im.setRight(true);
+                    im.setLeft(false);
+                }
+            
+                else {
+                    im.setRight(false);
+                    im.setLeft(false);
+                }
+            
+                if (deltaY < -dzVal) {
+                    im.setDown(true);
+                    im.setUp(false);
+                }
+            
+                else if (deltaY > dzVal) {
+                    im.setDown(false);
+                    im.setUp(true);
+                }
+            
+                else {
+                    im.setUp(false);
+                    im.setDown(false);
+                }
+            
+                app.getStateManager().getState(PlayerManager.class).getPlayer().setSpeedMult((FastMath.abs(deltaY) + FastMath.abs(deltaX)));
+            
+                }
+        
+            };
+        
+        
+            TextureKey key = new TextureKey("Textures/barrel.png", false);
+            Texture tex = ((SimpleApplication)stateManager.getApplication()).getAssetManager().loadTexture(key);
+            stick.setTextureAtlasImage(tex, "x=20|y=20|w=120|h=35");
+            stick.getThumb().setTextureAtlasImage(tex, "x=20|y=20|w=120|h=35");
+            screen.addElement(stick, true);
+            stick.setPosition(screen.getWidth()/10 - stick.getWidth()/2, screen.getHeight() / 10f - stick.getHeight()/5);
+            // Add some fancy effects
+            Effect fxIn = new Effect(Effect.EffectType.FadeIn, Effect.EffectEvent.Show,.5f);
+            stick.addEffect(fxIn);
+            Effect fxOut = new Effect(Effect.EffectType.FadeOut, Effect.EffectEvent.Hide,.5f);
+            stick.addEffect(fxOut);
+            stick.show();
+            
     }
     
     private void createMenuButton() {

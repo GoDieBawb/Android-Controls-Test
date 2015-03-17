@@ -22,11 +22,13 @@ public class Player extends Node {
     private Node                   model;
     private AnimControl            animControl;
     private AnimChannel            animChannel;
+    private float                  speedMult;
     
     public Player(SimpleApplication app) {
         this.app = app;
         createModel();
         createPhys();
+        speedMult = 1;
     }
     
     private void createPhys() {
@@ -92,8 +94,12 @@ public class Player extends Node {
         return null;
     }    
     
-    public int getSpeedMult() {
-        return 1;
+    public float getSpeedMult() {
+        return speedMult;
+    }
+    
+    public void setSpeedMult(float newVal) {
+        speedMult = newVal;
     }
     
 }
