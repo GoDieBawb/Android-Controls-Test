@@ -11,7 +11,6 @@ import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
 import com.jme3.texture.Texture;
-import mygame.GameManager;
 import mygame.player.PlayerManager;
 import mygame.util.ControlManager;
 import mygame.util.InteractionManager;
