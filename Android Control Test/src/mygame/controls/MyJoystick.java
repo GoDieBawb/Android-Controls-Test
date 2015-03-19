@@ -58,8 +58,7 @@ public abstract class MyJoystick extends Element implements Control {
 			@Override
 			public void controlMoveHook() {
                             
-                            if(getPosition().distance(origin) > maxDistance*2f) {
-                                setPosition(getPosition().subtract(centerVec).normalize().mult(maxDistance).add(centerVec));
+                            if(getPosition().distance(origin) > maxDistance*2f) {;
                                 return;
                             }
                             
@@ -85,6 +84,7 @@ public abstract class MyJoystick extends Element implements Control {
 			}
                         
 		};
+                
 		thumb.setDockS(true);
 		thumb.setDockW(true);
 		thumb.setIsMovable(true);

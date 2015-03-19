@@ -1,7 +1,9 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * this is a comment
+ * more and more
+ * more and more
  */
+
 package mygame.controls.dualstick;
 
 import com.jme3.app.SimpleApplication;
@@ -31,7 +33,7 @@ public class DualJoystickControl extends InteractionControl {
         player            = stateManager.getState(PlayerManager.class).getPlayer();
         app               = (SimpleApplication) stateManager.getApplication();
         createCameraManager();
-    } 
+    }
     
     private void createCameraManager() {
         cameraManager = new DualJoystickCameraManager(app);
