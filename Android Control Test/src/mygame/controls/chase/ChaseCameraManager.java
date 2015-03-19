@@ -20,7 +20,7 @@ public class ChaseCameraManager {
     private SimpleApplication app;
     private AppStateManager   stateManager;
     private Player            player;
-    public  ChaseCamera       cam;
+    private ChaseCamera       cam;
     private boolean           enabled;
   
     public ChaseCameraManager(Application app){
@@ -57,6 +57,10 @@ public class ChaseCameraManager {
             cam.setMinVerticalRotation(.145f); 
         }
         
+    }
+    
+    public ChaseCamera getChaseCam() {
+        return cam;
     }
     
     public void setEnabled(boolean newVal) {

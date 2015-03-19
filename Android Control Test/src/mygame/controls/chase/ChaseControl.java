@@ -82,6 +82,10 @@ public class ChaseControl extends InteractionControl {
         
     }
     
+    public ChaseCameraManager getCameraManager() {
+        return cameraManager;
+    }
+    
     @Override
     public void setEnabled(boolean newVal) {
         super.setEnabled(newVal);

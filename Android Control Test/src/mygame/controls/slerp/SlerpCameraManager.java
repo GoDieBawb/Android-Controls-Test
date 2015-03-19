@@ -165,8 +165,6 @@ public class SlerpCameraManager {
             }
             
         }
-        
-    
     
         if (panLeft) {
             Vector3f camDir = cam.getLeft().mult(6);

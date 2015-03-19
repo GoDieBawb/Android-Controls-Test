@@ -155,6 +155,18 @@ public class InteractionManager implements ActionListener {
         else if (triggerName.equals("Click"))
             return click;
         
+        if (triggerName.equals("Left1"))
+            return left1;
+        
+        else if (triggerName.equals("Right1"))
+            return right1;
+        
+        else if (triggerName.equals("Up1"))
+            return up1;
+        
+        else if (triggerName.equals("Down1"))
+            return down1;   
+        
         else
             return false;
         
