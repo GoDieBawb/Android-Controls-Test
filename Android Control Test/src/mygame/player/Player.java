@@ -23,6 +23,7 @@ public class Player extends Node {
     private AnimControl            animControl;
     private AnimChannel            animChannel;
     private float                  speedMult;
+    private float                  lookHeight;
     
     public Player(SimpleApplication app) {
         this.app = app;
@@ -100,6 +101,14 @@ public class Player extends Node {
     
     public void setSpeedMult(float newVal) {
         speedMult = newVal;
+    }
+    
+    public float getLookHeight() {
+        return lookHeight;
+    }
+    
+    public void setLookHeight(float newVal) {
+        lookHeight = newVal;
     }
     
 }

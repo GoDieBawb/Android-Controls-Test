@@ -21,7 +21,7 @@ import mygame.util.InteractionManager;
  */
 public class DualJoystickControl extends InteractionControl {
     
-    private boolean            left, right, up, down;
+    private boolean            left, right, up, down,left1, right1, up1, down1;
     private AppStateManager    stateManager;
     private Player             player;
     private SimpleApplication  app;
@@ -45,6 +45,10 @@ public class DualJoystickControl extends InteractionControl {
         down  = im.getIsPressed("Down");
         left  = im.getIsPressed("Left");
         right = im.getIsPressed("Right");
+        up1    = im.getIsPressed("Up1");
+        down1  = im.getIsPressed("Down1");
+        left1  = im.getIsPressed("Left1");
+        right1 = im.getIsPressed("Right1");
     }
     
     private void chaseMove(float tpf){
@@ -56,18 +60,22 @@ public class DualJoystickControl extends InteractionControl {
             walkDirection.addLocal(camDir);
             player.run();
         }
+        
         else if (down) {
             walkDirection.addLocal(camDir.negate());
             player.run();
         }
+        
         if (left) {
             walkDirection.addLocal(camLeft);
             player.run();
         }
+        
         else if (right) {
             walkDirection.addLocal(camLeft.negate());
             player.run();
         }
+        
         else if (!up && !down) {
             player.idle();
         }
@@ -105,7 +113,7 @@ public class DualJoystickControl extends InteractionControl {
             
         }
         
-        System.out.println(walkDirection);
+        //System.out.println(walkDirection);
         
         if (!up && !down && !left && !right)
         player.getPhys().setViewDirection(camDir);
@@ -114,10 +122,44 @@ public class DualJoystickControl extends InteractionControl {
         
     }
     
+    private void updateLookHeight(float tpf) {
+        
+        float lookSpeed = 1.5f*tpf;
+        
+        if(up1) {
+            if(player.getLookHeight() < 1f)
+            player.setLookHeight(player.getLookHeight()+lookSpeed);
+        }
+        
+        else if(down1) {
+            
+            if(player.getLookHeight() > -1f)
+            player.setLookHeight(player.getLookHeight()-lookSpeed);
+        }
+        
+        else {
+        
+            if (player.getLookHeight() < 0) {
+                
+                player.setLookHeight(player.getLookHeight()+lookSpeed);
+                
+            }
+            
+            else if (player.getLookHeight() > 0){
+                
+                player.setLookHeight(player.getLookHeight()-lookSpeed);
+                
+            }
+            
+        }
+        
+    }
+    
     @Override
     public void update(float tpf) {
         chaseMove(tpf);
         updateKeys();
+        updateLookHeight(tpf);
         cameraManager.update(tpf);
     }
     

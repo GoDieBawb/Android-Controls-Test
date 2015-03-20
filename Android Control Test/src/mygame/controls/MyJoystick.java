@@ -34,10 +34,12 @@ public abstract class MyJoystick extends Element implements Control {
 	private Vector2f      tempV2     = new Vector2f();
 	
 	public MyJoystick(ElementManager screen, Vector2f position, int size) {
+            
 		super(screen, UIDUtil.getUID(),
 			position, new Vector2f(size, size), new Vector4f(0,0,0,0),
 			screen.getStyle("Common").getString("blankImg")
 		);
+                
 		setIsMovable(false);
 		setIsResizable(false);
 		setScaleEW(false);

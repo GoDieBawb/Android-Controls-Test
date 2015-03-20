@@ -33,26 +33,27 @@ public class DualJoystickCameraManager {
   private Vector2f          touchSpot;
   
   public DualJoystickCameraManager(SimpleApplication app) {
-     this.app   = app;
-     player     = app.getStateManager().getState(PlayerManager.class).getPlayer();
-     isHunt     = false;
-     initCamera();
+       this.app   = app;
+       player     = app.getStateManager().getState(PlayerManager.class).getPlayer();
+       isHunt     = false;
+       initCamera();
   }
   
   //Creates camera
   private void initCamera() {
-    app.getFlyByCamera().setEnabled(false);
-    app.getFlyByCamera().setDragToRotate(true);
-    cam = this.app.getCamera();
-    cameraLook = player.getModel().getWorldTranslation().add(0,1f,0);
+      app.getFlyByCamera().setEnabled(false);
+      app.getFlyByCamera().setDragToRotate(true);
+      cam = this.app.getCamera();
+      cameraLook = player.getModel().getWorldTranslation().add(0,1f,0);
   }
   
   public void chaseCamMove(float tpf) {
       
-      float minDistance = 3f;
-      
+      float minDistance   = 3f;
+      float heightOffset  = player.getLookHeight()+.5f;
+
       cameraLook = cameraLook.mult(.7f).add
-                    (player.getModel().getWorldTranslation().add(0,.5f,0).mult(.3f));
+                    (player.getModel().getWorldTranslation().add(0,heightOffset,0).mult(.3f));
       
       cameraSpot = player.getModel().getWorldTranslation()
                       .add(player.getPhys().getViewDirection()
@@ -81,9 +82,10 @@ public class DualJoystickCameraManager {
           cam.setLocation(cam.getLocation().addLocal(panDir.mult(tpf)));
           
           if (cam.getLocation().distance(cameraSpot) < .05f)
-          isPan = false; 
+            isPan = false; 
+          
           else if (cam.getLocation().distance(cameraSpot) > 2f)
-          isPan = false;    
+            isPan = false;    
       
       }
     
@@ -91,36 +93,36 @@ public class DualJoystickCameraManager {
  
   private void slerpLookAt(Vector3f pos, float amount) {
       
-    TempVars vars = TempVars.get();
-    Vector3f newDirection = vars.vect1;
-    Vector3f newUp = vars.vect2;
-    Vector3f newLeft = vars.vect3;
-    Quaternion airRotation = vars.quat1;
+      TempVars vars          = TempVars.get();
+      Vector3f newDirection  = vars.vect1;
+      Vector3f newUp         = vars.vect2;
+      Vector3f newLeft       = vars.vect3;
+      Quaternion airRotation = vars.quat1;
 
-    newDirection.set(pos).subtractLocal(cam.getLocation()).normalizeLocal();
+      newDirection.set(pos).subtractLocal(cam.getLocation()).normalizeLocal();
 
-    newLeft.set(Vector3f.UNIT_Y).crossLocal(newDirection).normalizeLocal();
+      newLeft.set(Vector3f.UNIT_Y).crossLocal(newDirection).normalizeLocal();
     
-    if (newLeft.equals(Vector3f.ZERO)) {
+      if (newLeft.equals(Vector3f.ZERO)) {
         
-        if (newDirection.x != 0) {
-            newLeft.set(newDirection.y, -newDirection.x, 0f);
-        } 
+          if (newDirection.x != 0) {
+              newLeft.set(newDirection.y, -newDirection.x, 0f);
+          } 
         
-        else {
-            newLeft.set(0f, newDirection.z, -newDirection.y);
-        }
+          else {
+              newLeft.set(0f, newDirection.z, -newDirection.y);
+          }
         
-    }
+      }
 
-     newUp.set(newDirection).crossLocal(newLeft).normalizeLocal();
+       newUp.set(newDirection).crossLocal(newLeft).normalizeLocal();
 
-     airRotation.fromAxes(newLeft, newUp, newDirection);
-     airRotation.normalizeLocal();
+       airRotation.fromAxes(newLeft, newUp, newDirection);
+       airRotation.normalizeLocal();
 
-     slerpTo(airRotation, amount*5);
+       slerpTo(airRotation, amount*5);
 
-     vars.release();
+       vars.release();
 
     }
   
