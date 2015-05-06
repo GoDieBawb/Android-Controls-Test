@@ -51,7 +51,7 @@ public class DualJoystickControl extends InteractionControl {
         right1 = im.getIsPressed("Right1");
     }
     
-    private void chaseMove(float tpf){
+    private void chaseMove(float tpf) {
         camDir.set(app.getCamera().getDirection()).multLocal(10.0f, 0.0f, 10.0f);
         camLeft.set(app.getCamera().getLeft()).multLocal(10.0f);
         walkDirection.set(0, 0, 0);
@@ -81,11 +81,15 @@ public class DualJoystickControl extends InteractionControl {
         }
         
         float speedMult;
+        float xMult;
+        float zMult;
         speedMult = player.getSpeedMult()/2f;
         
         player.getPhys().setWalkDirection(walkDirection.mult(speedMult));
         
         if(walkDirection.x < 0) {
+            
+            xMult = -1;
             
             if(Math.abs(walkDirection.x) > 8)
                 walkDirection.x = -8;
@@ -94,12 +98,16 @@ public class DualJoystickControl extends InteractionControl {
         
         else {
             
+            xMult = 1;
+            
             if(Math.abs(walkDirection.x) > 8)
                 walkDirection.x = 8;
             
         }
         
         if(walkDirection.z < 0) {
+            
+            zMult = -1;
             
             if(Math.abs(walkDirection.z) > 8)
                 walkDirection.z = -8;
@@ -108,17 +116,36 @@ public class DualJoystickControl extends InteractionControl {
         
         else {
             
+            zMult = 1;
+            
             if(Math.abs(walkDirection.z) > 8)
                 walkDirection.z = 8;
             
         }
         
-        //System.out.println(walkDirection);
+        if (Math.abs(walkDirection.x) + Math.abs(walkDirection.z) > 8) {
+            
+            float x     = Math.abs(walkDirection.x);
+            float z     = Math.abs(walkDirection.z);
+            float ratio = x/z;
+            z = 8/ratio;
+            x = 8-z;
+            
+            x = x*xMult;
+            z = z*zMult;
+            
+            walkDirection.z = z;
+            walkDirection.x = x;
+            
+        }
+        
+        System.out.println(walkDirection);
         
         if (!up && !down && !left && !right)
-        player.getPhys().setViewDirection(camDir);
+            player.getPhys().setViewDirection(camDir);
+        
         else
-        player.getPhys().setViewDirection(walkDirection);
+            player.getPhys().setViewDirection(walkDirection);
         
     }
     
